@@ -5,8 +5,11 @@ import store from './store/index'
 import Axios from 'axios'
 import echarts from 'echarts'
 import VueSocketIO from 'vue-socket.io'
-import socketio from 'socket.io-client';
+import io from 'socket.io-client';
 import VueQuillEditor from 'vue-quill-editor';
+import progressive from 'progressive-image/dist/vue'
+
+
 import rem from '@/util/rem';
 import qs from 'qs'
 
@@ -16,15 +19,20 @@ import {
 
 import './assets/css/cssreset.css'
 import './plugins/element.js'
-import '../public/iconfont/iconfont.css'
+// import '../public/iconfont/iconfont.css'
+
 
 
 
 Vue.prototype.$qs = qs;
 Vue.prototype.$axios = Axios;
 Vue.prototype.$echarts = echarts
-Vue.use(VueSocketIO, 'wss://v.yansk.cn');
+Vue.use(VueSocketIO, 'https://v.yansk.cn');
 Vue.use(VueQuillEditor);
+Vue.use(progressive, {
+  removePreview: true,
+  scale: true
+})
 Vue.config.productionTip = false
 
 Axios.defaults.baseURL = BASE_URL;
@@ -77,8 +85,10 @@ Axios.interceptors.response.use(function (config) {
   return config;
 });
 
-new Vue({
+const vm = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+
+vm.$socket.disconnect();

@@ -1,15 +1,16 @@
 <template>
 	<el-aside :class="{collapse:!isCollapse}">
-		<div :class="{'logo-box':true,collapse:!isCollapse} ">后台管理</div>
+		<div :class="{'logo-box':true,collapse:!isCollapse} ">
+			<img class="logo-img" src="https://www.yansk.cn/images/logo.png" alt>
+			<p v-show="isCollapse">后台管理</p>
+		</div>
 		<el-menu
 			default-active="this.$route.path"
+			unique-opened:true
 			class="el-menu-vertical-demo"
-			@open="handleOpen"
-			@close="handleClose"
 			:collapse="!isCollapse"
 			background-color="#1D2939"
 			text-color="#bfbfbf"
-			active-text-color="#c1a8a9"
 			router
 		>
 			<el-menu-item index="/index">
@@ -18,7 +19,7 @@
 			</el-menu-item>
 			<el-submenu index="2">
 				<template slot="title">
-					<i class="iconfont icon-user"></i>
+					<i class="iconfont icon-guanliyuan_jiaoseguanli"></i>
 					<span slot="title">账号管理</span>
 				</template>
 				<el-menu-item index="/users/reg">
@@ -33,13 +34,13 @@
 			</el-submenu>
 			<el-submenu index="3">
 				<template slot="title">
-					<i class="iconfont icon-article"></i>
+					<i class="iconfont icon-wenzhangguanliicon-"></i>
 					<span slot="title">文章管理</span>
 				</template>
 				<el-menu-item index="/art/add">
 					<p>添加文章</p>
 				</el-menu-item>
-				<el-menu-item index="/art/showlist">
+				<el-menu-item index="/art/list">
 					<p>文章列表</p>
 				</el-menu-item>
 				<el-menu-item index="/art/type/list">
@@ -57,7 +58,7 @@
 			</el-submenu>
 			<el-submenu index="4">
 				<template slot="title">
-					<i class="iconfont icon-record_update"></i>
+					<i class="iconfont icon-gongneng_fabuxuqiu"></i>
 					<span>更新日志</span>
 				</template>
 				<el-menu-item index="/log/list">
@@ -67,8 +68,8 @@
 					<p>添加日志</p>
 				</el-menu-item>
 			</el-submenu>
-			<el-menu-item index="5">
-				<i class="iconfont icon-0901shanchu"></i>
+			<el-menu-item index="/art/recycle/list">
+				<i class="iconfont icon-shanchu"></i>
 				<span slot="title">回收站</span>
 			</el-menu-item>
 		</el-menu>
@@ -82,8 +83,17 @@
 		line-height: 200px;
 	}
 	.logo-box {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: flex-start;
 		height: 60px;
 		line-height: 60px;
+		border-bottom: 1px solid rgb(63, 78, 92);
+		box-sizing: border-box;
+		.logo-img {
+			width: 50px;
+		}
 		&.collapse {
 			width: 64px;
 		}
@@ -101,9 +111,41 @@
 			width: 64px !important;
 		}
 	}
+	.el-menu-vertical-demo:not(.el-menu--collapse) {
+		width: 300px;
+		min-height: 400px;
+	}
 	.el-menu {
 		border: 0 !important;
-		transition: width 0.3s ease;
+		text-align: center;
+		.el-submenu {
+			&.is-opened {
+				border-top: 1px solid rgb(94, 94, 94);
+				box-sizing: border-box;
+				.el-submenu__title {
+					background-color: rgb(22, 31, 43) !important;
+				}
+			}
+
+			.el-menu-item {
+				&.is-active {
+					color: rgb(180, 180, 180);
+					background-color: rgb(10, 15, 20) !important;
+					border-left: 2px solid rgb(15, 112, 91);
+					p {
+						color: inherit;
+					}
+				}
+				p {
+					color: rgb(177, 177, 177);
+				}
+				text-align: center;
+				background-color: rgb(22, 31, 43) !important;
+				&:hover {
+					background-color: rgb(17, 25, 34) !important;
+				}
+			}
+		}
 		.el-menu-item {
 			& > p {
 				&::before {
@@ -146,17 +188,11 @@
 				]
 			};
 		},
-		props: ["isCollapse"],
-		methods: {
-			handleOpen(key, keyPath) {
-				console.log(key, keyPath);
-			},
-			handleClose(key, keyPath) {
-				console.log(key, keyPath);
+		computed: {
+			//导航栏状态
+			isCollapse() {
+				return this.$store.state.isCollapseSidebar;
 			}
-		},
-		created() {
-			console.log(this.isCollapse);
 		}
 	};
 </script>

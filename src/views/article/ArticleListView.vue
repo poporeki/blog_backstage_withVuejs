@@ -111,14 +111,9 @@
 
 <script>
 	export default {
-		methods: {
-			deleteRow(index, rows) {
-				rows.splice(index, 1);
-			}
-		},
 		data() {
 			return {
-				page: 2,
+				page: 1,
 				total: 15,
 				limit: 10,
 				loading: false,

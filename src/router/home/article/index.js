@@ -1,4 +1,4 @@
-import ShowArtList from './showlist';
+import ShowArtList from './articlelist';
 import AddArticle from './addart';
 import ArticleType from './arttype'
 import ArticleUpdate from './articleupdate'
@@ -7,5 +7,5 @@ import MainCommon from '@/components/home/MainCommon'
 export default {
   path: 'art',
   component: MainCommon,
-  children: [ShowArtList, AddArticle, ...ArticleType, ...ArticleTag, ArticleUpdate]
+  children: [...ShowArtList, AddArticle, ...ArticleType, ...ArticleTag, ArticleUpdate]
 }

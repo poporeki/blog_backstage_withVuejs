@@ -99,17 +99,25 @@
 				this.cpuData.push(this.cpuUsage);
 				this.memoryData.push(this.memUsage);
 				this.chart.setOption(this.option);
+			},
+			disconnect() {
+				console.log("socket is close");
 			}
 		},
 		mounted() {
 			this.drawLine();
-
+			this.$socket.connect();
 			this.$socket.emit("hardware");
 		},
+		beforeDestroy() {
+			this.$socket.disconnect();
+		},
 		computed: {
+			//CPU使用率
 			cpuUsage() {
 				return this.$store.state.socket.hardware.cpuUsage;
 			},
+			//内存使用率
 			memUsage() {
 				return this.$store.state.socket.hardware.memUsage;
 			}

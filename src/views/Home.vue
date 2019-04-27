@@ -1,8 +1,8 @@
 <template>
 	<el-container style="height:100%;" direction="horizontal">
-		<item-aside :isCollapse="isCollapse"></item-aside>
+		<item-aside></item-aside>
 		<el-container direction="vertical">
-			<item-header @toggleCollapse="toggleCollapse"></item-header>
+			<item-header></item-header>
 			<el-main>
 				<router-view></router-view>
 			</el-main>
@@ -50,21 +50,23 @@
 	// @ is an alias to /src
 	import ItemHeader from "@/components/home/common/Header";
 	import ItemAside from "@/components/home/common/Aside";
+	import { mapMutations } from "vuex";
 	export default {
 		name: "home",
 		data() {
-			return {
-				isCollapse: true
-			};
+			return {};
 		},
 		components: {
 			ItemHeader,
 			ItemAside
 		},
 		methods: {
-			toggleCollapse(data) {
-				console.log("$emit" + data);
-				this.isCollapse = data;
+			...mapMutations(["isCollapse"])
+		},
+		created() {
+			let clientWid = document.body.clientWidth;
+			if (clientWid < 992) {
+				this.isCollapse();
 			}
 		}
 	};

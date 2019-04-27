@@ -1,12 +1,14 @@
 <template>
 	<el-card>
 		<div slot="header">
-			<el-row type="flex" justify="space-around">
-				<el-col>訪問人數</el-col>
+			<el-row type="flex" justify="space-around" align="middle">
+				<el-col>
+					<p>访问数</p>
+				</el-col>
 				<el-col>
 					<el-button-group>
-						<el-button type="primary" icon="el-icon-arrow-left" @click="getFewDaysVistor('week')">七天内</el-button>
-						<el-button type="primary" @click="getFewDaysVistor('month')">
+						<el-button icon="el-icon-arrow-left" @click="getFewDaysVistor('week')">七天内</el-button>
+						<el-button @click="getFewDaysVistor('month')">
 							30天内
 							<i class="el-icon-arrow-right el-icon--right"></i>
 						</el-button>
@@ -23,10 +25,12 @@
 			return {
 				chart: "",
 				weekData: {
+					name: "一周访问数",
 					xAxis: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 					data: []
 				},
 				monthData: {
+					name: "30日访问数",
 					xAxis: [],
 					data: []
 				},

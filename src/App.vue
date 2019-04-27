@@ -11,6 +11,7 @@
 </script>
 
 <style>
+	@import "https://at.alicdn.com/t/font_1165479_6sutxk7rbvb.css";
 	#app {
 		position: relative;
 		height: 100%;

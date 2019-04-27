@@ -190,7 +190,13 @@
 					that.artInfo = data.data.artInfo;
 					that.form.id = arcid;
 					that.form.title = that.artInfo.name;
-					that.form.source.link = that.artInfo.from;
+					if (typeof that.artInfo.from === "string") {
+						that.form.source.link = that.artInfo.from;
+					} else if (that.artInfo.from instanceof Object) {
+						that.form.source.link = that.artInfo.from.link;
+						that.form.source.name = that.artInfo.from.name;
+					}
+
 					that.form.author = that.userInfo.username;
 					that.form.artContent = that.artInfo.content;
 					that.form.carousel = that.artInfo.attribute.carousel;
@@ -253,14 +259,23 @@
 						arc_conSource: artText
 					};
 					that.$axios.post(url, reqData).then(({ data }) => {
-						if (data.status) {
-							that.updateSuccess = true;
-							that.isRequest = false;
+						that.isRequest = false;
+						if (data.status !== 1) {
 							this.$message({
-								type: "success",
-								message: "修改成功!"
+								type: "error",
+								message: data.msg
 							});
+							return;
 						}
+						that.updateSuccess = true;
+
+						this.$message({
+							type: "success",
+							message: "修改成功!"
+						});
+						that.$router.push({
+							path: "/art/list"
+						});
 					});
 					console.log(artText);
 				} catch {}
