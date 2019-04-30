@@ -60,17 +60,12 @@
 				</el-row>
 				<el-row>
 					<el-col>
-						<quill-editor
-							v-model="form.artContent"
-							:options="editorOption"
-							ref="quill_editor"
-							prop="artContent"
-						></quill-editor>
+						<editor ref="quill_editor" :isSubmit="isSubmit" @editorContent="getArtContent"></editor>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-form-item>
-						<el-button type="primary" @click="submitThisArticle">提交文章</el-button>
+						<el-button type="primary" @click="isSubmit=true">提交文章</el-button>
 						<el-button>取消</el-button>
 					</el-form-item>
 				</el-row>
@@ -80,30 +75,9 @@
 </template>
 
 <script>
-	import hljs from "highlight.js";
-	import "highlight.js/styles/agate.css";
-	import "quill/dist/quill.core.css";
-	import "quill/dist/quill.snow.css";
-	import "quill/dist/quill.bubble.css";
-
-	const editorToolbar = [
-		["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
-		["blockquote", "code-block"], // 引用  代码块
-		[{ header: 1 }, { header: 2 }], // 1、2 级标题
-		[{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表
-		[{ script: "sub" }, { script: "super" }], // 上标/下标
-		[{ indent: "-1" }, { indent: "+1" }], // 缩进
-		// [{'direction': 'rtl'}],                         // 文本方向
-		[{ size: ["small", false, "large", "huge"] }], // 字体大小
-		[{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题
-		[{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
-		[{ font: [] }], // 字体种类
-		[{ align: [] }], // 对齐方式
-		["clean"], // 清除文本格式
-		["link", "image", "video"] // 链接、图片、视频
-	];
-
+	import editor from "@/components/QuillEditor";
 	export default {
+		components: { editor },
 		data() {
 			return {
 				pageTitle: "添加文章",
@@ -111,6 +85,7 @@
 				artTypes: [],
 				artTags: [],
 				isRequest: false,
+				isSubmit: false,
 				form: {
 					name: "",
 					author: "",
@@ -123,20 +98,11 @@
 					artContent: "",
 					artSource: "",
 					carousel: false
-				},
-				editorOption: {
-					modules: {
-						syntax: {
-							highlight: text => hljs.highlightAuto(text).value
-						},
-						toolbar: {
-							container: editorToolbar
-						}
-					}
 				}
 			};
 		},
 		methods: {
+			/**获取文章标签 */
 			getArtTags() {
 				let that = this;
 				that.$axios.get("/api/v1/getArctags").then(({ data }) => {
@@ -145,6 +111,7 @@
 				});
 			},
 			onSubmit() {},
+			/**获取文章分类 */
 			getArtTypes() {
 				let that = this;
 				that.$axios.get("/api/v1/getArctypes").then(({ data }) => {
@@ -152,10 +119,17 @@
 					that.artTypes = data;
 				});
 			},
+			/**获取文章文本并提交到服务器 */
+			getArtContent(res) {
+				this.form.artContent = res.text;
+				this.form.artSource = res.html;
+				this.submitThisArticle();
+			},
+			/**提交文章 */
 			submitThisArticle() {
 				let url = "/backend/art/addarticle";
 				let that = this;
-				let artText = this.$refs.quill_editor.quill.getText(0, 100);
+				this.isRequest = true;
 				this.$axios
 					.post(url, {
 						arc_title: this.form.name,
@@ -164,13 +138,14 @@
 						arc_type: this.form.artType,
 						arc_tags: this.form.artTags,
 						arc_content: this.form.artContent,
-						arc_source: artText
+						arc_source: this.form.artSource
 					})
 					.then(({ data }) => {
+						this.isRequest = false;
 						if (data.status !== 1) {
 							this.$message({
 								type: "error",
-								message: "data.msg"
+								message: data.msg
 							});
 							return;
 						}

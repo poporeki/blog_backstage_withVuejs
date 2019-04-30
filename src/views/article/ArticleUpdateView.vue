@@ -82,17 +82,17 @@
 				</el-row>
 				<el-row>
 					<el-col>
-						<quill-editor
-							v-model="form.artContent"
-							:options="editorOption"
+						<editor
 							ref="quill_editor"
-							prop="artContent"
-						></quill-editor>
+							:isSubmit="isSubmit"
+							:art-source="form.artSource"
+							@editorContent="getArtContentAndSubmit"
+						></editor>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-form-item>
-						<el-button type="primary" @click="submitUpdataShowTips">提交更新</el-button>
+						<el-button type="primary" @click="isSubmit=true">提交更新</el-button>
 						<el-button>取消</el-button>
 					</el-form-item>
 				</el-row>
@@ -102,41 +102,17 @@
 </template>
 
 <script>
-	const editorToolbar = [
-		["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
-		["blockquote", "code-block"], // 引用  代码块
-		[{ header: 1 }, { header: 2 }], // 1、2 级标题
-		[{ list: "ordered" }, { list: "bullet" }], // 有序、无序列表
-		[{ script: "sub" }, { script: "super" }], // 上标/下标
-		[{ indent: "-1" }, { indent: "+1" }], // 缩进
-		// [{'direction': 'rtl'}],                         // 文本方向
-		[{ size: ["small", false, "large", "huge"] }], // 字体大小
-		[{ header: [1, 2, 3, 4, 5, 6, false] }], // 标题
-		[{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
-		[{ font: [] }], // 字体种类
-		[{ align: [] }], // 对齐方式
-		["clean"], // 清除文本格式
-		["link", "image", "video"] // 链接、图片、视频
-	];
+	import editor from "@/components/QuillEditor";
 	import LoadingRequest from "@/components/loading/LoadingXHR";
 	import hljs from "highlight.js";
 	import "highlight.js/styles/agate.css";
 	export default {
-		components: { LoadingRequest },
+		components: { LoadingRequest, editor },
 		data() {
 			return {
 				isRequest: false,
 				isInit: true,
-				editorOption: {
-					modules: {
-						syntax: {
-							highlight: text => hljs.highlightAuto(text).value
-						},
-						toolbar: {
-							container: editorToolbar
-						}
-					}
-				},
+				isSubmit: false,
 				artInfo: [],
 				artTypes: [],
 				artTags: [],
@@ -199,6 +175,7 @@
 
 					that.form.author = that.userInfo.username;
 					that.form.artContent = that.artInfo.content;
+					that.form.artSource = that.artInfo.source;
 					that.form.carousel = that.artInfo.attribute.carousel;
 					that.form.artType = that.artInfo.types.selected[0]._id;
 					that.artTags = that.artInfo.tags;
@@ -237,6 +214,11 @@
 						});
 					});
 			},
+			getArtContentAndSubmit(res) {
+				this.form.artContent = res.text;
+				this.form.artSource = res.html;
+				this.submitArticleUpdate();
+			},
 			/**
 			 * 提交文章更新
 			 */
@@ -247,16 +229,15 @@
 				try {
 					await that.validate("updateForm");
 					that.isRequest = true;
-					let artText = this.$refs.quill_editor.quill.getText(0, 100);
 					let form = that.form;
 					let reqData = {
 						arc_title: form.title,
 						arc_carousel: form.carousel ? "on" : "off",
-						arc_reproduction: form.source.link,
+						arc_reproduction: form.source,
 						arc_type: form.artType,
 						arc_tags: form.artTags,
 						arc_content: form.artContent,
-						arc_conSource: artText
+						arc_conSource: form.artSource
 					};
 					that.$axios.post(url, reqData).then(({ data }) => {
 						that.isRequest = false;

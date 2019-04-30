@@ -3,10 +3,10 @@
 		<el-col :xs="24" :sm="12" :md="6">
 			<div class="section-top-item bg-teal">
 				<el-row type="flex" justify="space-around" align="middle">
-					<el-col>
+					<el-col :span="6">
 						<i class="iconfont icon-geren"></i>
 					</el-col>
-					<el-col>
+					<el-col :span="18">
 						<!-- <h4 class="tit white-8">上次登录时间:</h4> -->
 						<div class="content">
 							<span>欢迎登录,{{userInfo.username}}</span>
@@ -19,10 +19,10 @@
 		<el-col :xs="24" :sm="12" :md="6">
 			<div class="section-top-item warning" @click="$router.push({path:'/users/vistor'})">
 				<el-row type="flex" justify="space-around" align="middle">
-					<el-col>
+					<el-col :span="6">
 						<i class="iconfont icon-zuijinlaifang"></i>
 					</el-col>
-					<el-col>
+					<el-col :span="18">
 						<h4 class="tit white-8">今日访问人数</h4>
 						<div class="content">
 							<span>{{vistorTotal}}</span>
@@ -34,10 +34,10 @@
 		<el-col :xs="24" :sm="12" :md="6">
 			<div class="section-top-item info" @click="$router.push({path:'/art/list'})">
 				<el-row type="flex" justify="space-around" align="middle">
-					<el-col>
+					<el-col :span="6">
 						<i class="iconfont icon-wenzhangguanliicon- white-8"></i>
 					</el-col>
-					<el-col>
+					<el-col :span="18">
 						<h4 class="tit white-8">文章总数</h4>
 						<div class="content">
 							<span>{{artTotal}}</span>
@@ -49,10 +49,10 @@
 		<el-col :xs="24" :sm="12" :md="6">
 			<div class="section-top-item danger pointer" @click="openBlog()">
 				<el-row type="flex" justify="space-around" align="middle">
-					<el-col>
+					<el-col :span="6">
 						<i class="iconfont icon-blog"></i>
 					</el-col>
-					<el-col>
+					<el-col :span="18">
 						<div class="content">
 							<span>我的博客</span>
 						</div>
