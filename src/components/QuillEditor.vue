@@ -18,7 +18,7 @@
 					:key="iidx"
 					@click="insertImage(img.src)"
 				>
-					<img :src="'http://localhost:3000'+img.src" alt>
+					<img :src="'https://v.yansk.cn'+img.src" alt>
 				</div>
 			</div>
 		</div>
@@ -92,7 +92,7 @@
 			},
 			insertImage(url) {
 				if (url != null) {
-					let value = "http://localhost:3000" + url;
+					let value = "https://v.yansk.cn" + url;
 					// API: https://segmentfault.com/q/1010000008951906
 					//获取光标所在编辑器的位置
 					this.addRange = this.$refs.quill_editor.quill.getSelection();

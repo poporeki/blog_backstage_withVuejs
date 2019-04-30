@@ -28,7 +28,7 @@
 		props: {
 			uploadUrl: {
 				type: String,
-				default: "http://localhost:3000/backend/art/uploadartimg"
+				default: "https://v.yansk.cn/backend/art/uploadartimg"
 			},
 			uploadBoxIsShow: {
 				type: Boolean,
