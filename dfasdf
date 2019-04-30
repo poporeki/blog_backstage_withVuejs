@@ -1,0 +1,48 @@
+[33mcommit 9d92d08d15b0c413c71ea6ac97b3bd48686095ad[m[33m ([m[1;36mHEAD[m[33m)[m
+Merge: bc5412a 514a741
+Author: poporeki <yansk@live.com>
+Date:   Tue Apr 30 14:53:18 2019 +0800
+
+    Merge branch 'master' of github.com:poporeki/blog_backstage_withVuejs into HEAD
+
+[33mcommit 514a741488913b395e797e63a54138c09009195c[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: poporeki <yansk@live.com>
+Date:   Tue Apr 30 14:51:02 2019 +0800
+
+    Delete .gitignore
+
+[33mcommit aa71f22e6524940f838b7ab9d0cf295f20dd2b36[m
+Author: poporeki <yansk@live.com>
+Date:   Tue Apr 30 14:50:45 2019 +0800
+
+    Delete README.md
+
+[33mcommit bc5412a1bb9d2d3d9e34dfd900bc43928c565f16[m[33m ([m[1;32mmaster[m[33m)[m
+Author: poporeki <yansk@live.com>
+Date:   Tue Apr 30 14:38:46 2019 +0800
+
+    '190430'
+
+[33mcommit 8a81b6726c7ed69d662e04d6ffb08782a0d12f5f[m
+Author: poporeki <yansk@live.com>
+Date:   Tue Apr 30 14:35:26 2019 +0800
+
+    Initial commit
+
+[33mcommit a917415fa20e01a84c3e5cdd78c66523539c4216[m
+Author: poporeki <yansk@live.com>
+Date:   Sun Apr 28 00:03:40 2019 +0800
+
+    '190428'
+
+[33mcommit 94f789011b5bf6e1c4741b0795f30aae2060c1b0[m
+Author: poporeki <yansk@live.com>
+Date:   Sat Apr 27 01:28:44 2019 +0800
+
+    '190427'
+
+[33mcommit 8a6201a893b22d5923c4341d00e642453dd895a3[m
+Author: poporeki <yansk@live.com>
+Date:   Thu Mar 21 03:06:15 2019 +0800
+
+    init
