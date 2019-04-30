@@ -62,7 +62,11 @@
 					});
 					return;
 				}
-				this.$emit("resultUpload", { src: response.data });
+				let images = response.data;
+				let result = images.map(val => {
+					return { src: val };
+				});
+				this.$emit("resultUpload", result);
 				this.$emit("uploadBoxIsShow", false);
 			}
 		},
