@@ -9,25 +9,24 @@
 				@click="$router.push({path:'/art/tag/add'})"
 			></el-button>
 		</el-row>
-		<el-container>
-			<el-row>
-				<el-col>
-					<el-table
-						v-loading="loading"
-						@row-click="showDialog"
-						:data="tableData"
-						style="width: 100%"
-						min-height="400"
-						max-height="600"
-					>
-						<el-table-column type="index" width="50"></el-table-column>
-						<el-table-column prop="tag_name" label="标签名" width="300"></el-table-column>
-						<el-table-column prop="count" label="相关文章数量"></el-table-column>
-					</el-table>
-				</el-col>
-			</el-row>
-			<el-row></el-row>
-		</el-container>
+
+		<el-row>
+			<el-col>
+				<el-table
+					v-loading="loading"
+					@row-click="showDialog"
+					:data="tableData"
+					style="width: 100%"
+					min-height="400"
+					max-height="600"
+				>
+					<el-table-column type="index" width="50"></el-table-column>
+					<el-table-column prop="tag_name" label="标签名" width="300"></el-table-column>
+					<el-table-column prop="count" label="相关文章数量"></el-table-column>
+				</el-table>
+			</el-col>
+		</el-row>
+
 		<el-dialog title="修改文章标签" :visible.sync="dialogIsShow">
 			<el-form v-loading="dialogLoading">
 				<el-form-item label="标签名">

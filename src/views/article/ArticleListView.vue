@@ -2,12 +2,30 @@
 <template>
 	<el-card>
 		<el-row>
-			<el-button icon="el-icon-arrow-left" circle @click="updateArtList"></el-button>
-			<el-button type="primary" icon="el-icon-edit" circle @click="$router.push({path:'/art/add'})"></el-button>
-			<el-button type="success" icon="el-icon-check" circle></el-button>
-			<el-button type="info" icon="el-icon-message" circle></el-button>
-			<el-button type="warning" icon="el-icon-star-off" circle></el-button>
-			<el-button type="danger" icon="el-icon-delete" circle></el-button>
+			<el-col :span="12">
+				<el-button icon="el-icon-arrow-left" circle @click="updateArtList"></el-button>
+				<el-button type="primary" icon="el-icon-edit" circle @click="$router.push({path:'/art/add'})"></el-button>
+				<el-button type="success" icon="el-icon-check" circle></el-button>
+				<el-button type="info" icon="el-icon-message" circle></el-button>
+				<el-button type="warning" icon="el-icon-star-off" circle></el-button>
+				<el-button type="danger" icon="el-icon-delete" circle></el-button>
+			</el-col>
+			<el-col :span="12">
+				<div class="search-input-box">
+					<el-input
+						placeholder="文章名"
+						class="search-input"
+						v-model="searchInputText"
+						@keyup.enter.native="updateArtList({ keywords:searchInputText ,page:1});"
+					>
+						<el-button
+							slot="append"
+							icon="el-icon-search"
+							@click="updateArtList({ keywords:searchInputText ,page:1});"
+						></el-button>
+					</el-input>
+				</div>
+			</el-col>
 		</el-row>
 		<el-container>
 			<el-row>
@@ -75,6 +93,13 @@
 	}
 	.el-card {
 		overflow: auto !important;
+		.search-input-box {
+			display: flex;
+			justify-content: flex-end;
+			.search-input {
+				max-width: 400px;
+			}
+		}
 	}
 	.el-button {
 	}
@@ -117,6 +142,7 @@
 				total: 15,
 				limit: 10,
 				loading: false,
+				searchInputText: "",
 				tableData: []
 			};
 		},
@@ -134,10 +160,15 @@
 					.post("/backend/art/articlelist", str)
 					.then(({ data }) => {
 						that.loading = !that.loading;
+						if (data.status !== 1) {
+							this.$message.error(data.msg);
+							return;
+						}
 						that.total = data.data.artCount;
 						that.tableData = data.data.artInfo.arclist;
 					})
 					.catch(err => {
+						that.loading = !that.loading;
 						console.log(err);
 					});
 			},

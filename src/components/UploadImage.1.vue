@@ -4,11 +4,10 @@
 			class="upload-demo"
 			drag
 			:action="uploadUrl"
-			accept="image/jpeg, image/gif, image/png, image/bmp"
+			:with-credentials="true"
 			:before-upload="beforeUpload"
 			:on-success="uploadSuccess"
 			multiple
-			:data="requestData"
 		>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">
@@ -29,7 +28,7 @@
 		props: {
 			uploadUrl: {
 				type: String,
-				default: "https://upload-z2.qiniup.com"
+				default: "https://v.yansk.cn/backend/art/uploadartimg"
 			},
 			uploadBoxIsShow: {
 				type: Boolean,
@@ -43,47 +42,20 @@
 			}
 		},
 		data() {
-			return {
-				requestData: {
-					token: ""
-				},
-				link: "http://image.yansk.cn"
-			};
-		},
-		created() {
-			this.getUploadToken();
+			return {};
 		},
 		methods: {
-			async beforeUpload(file) {
-				console.log("before");
+			beforeUpload(file) {
 				const isImage = this.uploadType.indexOf(file.type) !== -1;
 				const isLt1M = file.size / 1024 / 1024 < 1;
 				!isImage && this.$message.error("上传文件只能是图片格式!");
 				!isLt1M && this.$message.error("上传文件大小不能超过 1MB!");
-				await this.getUploadToken();
 				return isImage && isLt1M;
-
 				console.log(file);
-			},
-			/**获取Token */
-			getUploadToken() {
-				let url = "/api/v1/qiniu/upload/gettoken";
-				return new Promise((resolve, reject) => {
-					try {
-						this.$axios.get(url).then(({ data }) => {
-							if (data.status !== 1 || !data.token) return reject(false);
-							this.requestData.token = data.token;
-							console.log(this.requestData);
-							resolve(data.token);
-						});
-					} catch (err) {
-						reject(err);
-					}
-				});
 			},
 			uploadSuccess(response, file, fileList) {
 				console.log(response);
-				if (!response.key) {
+				if (response.status !== 1) {
 					this.$message({
 						type: "error",
 						message: "上传失败"
@@ -91,12 +63,8 @@
 					return;
 				}
 				let images = response.data;
-				let kl = this.link;
-				let result = fileList.map(val => {
-					if (val.status !== "success") return;
-					return {
-						src: kl + "/" + val.response.key
-					};
+				let result = images.map(val => {
+					return { src: val };
 				});
 				this.$emit("resultUpload", result);
 				this.$emit("uploadBoxIsShow", false);

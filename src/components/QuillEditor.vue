@@ -18,7 +18,7 @@
 					:key="iidx"
 					@click="insertImage(img.src)"
 				>
-					<img :src="'https://v.yansk.cn'+img.src" alt>
+					<img :src="img.src" alt>
 				</div>
 			</div>
 		</div>
@@ -74,7 +74,9 @@
 				let uploadedImages = this.uploadedImages;
 				for (let i = 0; i < uploadedImages.length; i++) {
 					let image = uploadedImages[i];
-					if (image.src === result.src) return;
+					for (let j = 0; i < result.length; j++) {
+						if (image.src === result[j].src) return;
+					}
 				}
 				this.uploadedImages = this.uploadedImages.concat(result);
 			},
@@ -90,16 +92,16 @@
 				};
 				this.$emit("editorContent", obj);
 			},
+			/**插入图片 */
 			insertImage(url) {
 				if (url != null) {
-					let value = "https://v.yansk.cn" + url;
 					// API: https://segmentfault.com/q/1010000008951906
 					//获取光标所在编辑器的位置
 					this.addRange = this.$refs.quill_editor.quill.getSelection();
 					this.$refs.quill_editor.quill.insertEmbed(
 						this.addRange !== null ? this.addRange.index : 0,
 						"image",
-						value,
+						url,
 						Quill.sources.USER
 					); // 调用编辑器的 insertEmbed 方法，插入URL
 					this.isShowImageListBox = false;

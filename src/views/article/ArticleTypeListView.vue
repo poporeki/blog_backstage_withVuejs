@@ -5,30 +5,29 @@
 			<el-button icon="el-icon-arrow-left" circle @click="updateTypeList"></el-button>
 			<el-button type="primary" icon="el-icon-edit" circle @click="$router.push({path:'/art/add'})"></el-button>
 		</el-row>
-		<el-container>
-			<el-row>
-				<el-col>
-					<el-table
-						v-loading="loading"
-						:data="tableData"
-						style="width: 100%"
-						min-height="400"
-						max-height="600"
-					>
-						<el-table-column type="index" width="50"></el-table-column>
-						<el-table-column prop="typeName" label="分类名"></el-table-column>
-						<el-table-column prop="typeIconName" label="图标类名" width="120"></el-table-column>
 
-						<el-table-column fixed="right" label="操作" width="120">
-							<template slot-scope="scope">
-								<el-button @click.native.prevent="showDialog(scope.row)" type="text" size="small">修改</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-				</el-col>
-			</el-row>
-			<el-row></el-row>
-		</el-container>
+		<el-row>
+			<el-col>
+				<el-table
+					v-loading="loading"
+					:data="tableData"
+					style="width: 100%"
+					min-height="400"
+					max-height="600"
+				>
+					<el-table-column type="index" width="50"></el-table-column>
+					<el-table-column prop="typeName" label="分类名"></el-table-column>
+					<el-table-column prop="typeIconName" label="图标类名" width="120"></el-table-column>
+
+					<el-table-column fixed="right" label="操作" width="120">
+						<template slot-scope="scope">
+							<el-button @click.native.prevent="showDialog(scope.row)" type="text" size="small">修改</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</el-col>
+		</el-row>
+
 		<el-dialog title="修改分类名" :visible.sync="dialogIsShow">
 			<el-form>
 				<el-form-item label="分类名">
@@ -139,13 +138,15 @@
 				let url = "/backend/art/type/update";
 				let typeid = this.dialogTypeData.type_id;
 				let typeName = this.dialogTypeData.type_name;
+				let iconName = this.dialogTypeData.icon_name;
 				let oldTypeName = this.dialogTypeData.old_type_name;
 				that.dialogLoading = true;
 
 				this.$axios
 					.post(url, {
 						type_id: typeid,
-						new_type_name: typeName
+						new_type_name: typeName,
+						icon_name: iconName
 					})
 					.then(({ data }) => {
 						if (data.status !== 1) {

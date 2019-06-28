@@ -40,7 +40,8 @@
 	export default {
 		data() {
 			return {
-				activeIndex: "1"
+				activeIndex: "1",
+				URL_REG: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
 			};
 		},
 		methods: {
@@ -67,7 +68,9 @@
 			},
 			//头像URL
 			avatarUrl() {
-				return `https://v.yansk.cn${this.userInfo.avatarPath}`;
+				return this.URL_REG.test(this.userInfo.avatarPath)
+					? this.userInfo.avatarPath
+					: `https://v.yansk.cn${this.userInfo.avatarPath}`;
 			},
 			//导航栏状态
 			isCollapse() {

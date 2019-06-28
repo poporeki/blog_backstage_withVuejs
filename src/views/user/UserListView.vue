@@ -145,7 +145,6 @@
 						that.record.data.list = data.data.list;
 						that.record.data.count = data.data.count;
 						that.record.page += 1;
-						console.log(data);
 					});
 			},
 			resetRecord() {

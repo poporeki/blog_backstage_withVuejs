@@ -12,7 +12,7 @@
 			<div class="el-col" v-if="isShow">
 				<el-card class="card-box">
 					<div slot="header" class="card-header">
-						<img src="https://www.yansk.cn/images/logo.png" alt="login" class="logo-img">
+						<img src="https://v.yansk.cn/images/logo.png" alt="login" class="logo-img">
 						<h2>后台登陆</h2>
 					</div>
 					<el-form
@@ -31,7 +31,12 @@
 						</el-form-item>
 					</el-form>
 					<div class="btn-login-wrapper">
-						<el-button type="primary" @click="submitForm('ruleForm')" class="btn-login">登陆</el-button>
+						<el-button
+							type="primary"
+							@click="submitForm('ruleForm')"
+							class="btn-login"
+							:loading="isSubmit"
+						>登陆{{isSubmit?'中':''}}</el-button>
 					</div>
 				</el-card>
 			</div>
@@ -44,11 +49,13 @@
 	export default {
 		data() {
 			return {
+				isSubmit: false,
+				//背景图片
 				background: {
 					preview:
-						"https://msagfx.live.com/16.000.28156.5/images/Backgrounds/0-small.jpg?x=138bcee624fa04ef9b75e86211a9fe0d",
+						"https://logincdn.msauth.net/16.000.28230.00/images/Backgrounds/0-small.jpg?x=138bcee624fa04ef9b75e86211a9fe0d",
 					src:
-						"https://msagfx.live.com/16.000.28156.5/images/Backgrounds/0.jpg?x=a5dbd4393ff6a725c7e62b61df7e72f0"
+						"https://logincdn.msauth.net/16.000.28230.00/images/Backgrounds/0.jpg?x=a5dbd4393ff6a725c7e62b61df7e72f0"
 				},
 				isShow: false,
 				labelPosition: "right",
@@ -74,28 +81,39 @@
 			};
 		},
 		methods: {
+			/**效验表单 */
+			validataForm(formName) {
+				return new Promise((resolve, reject) => {
+					this.$refs[formName].validate(valid => {
+						valid ? resolve(true) : reject(false);
+					});
+				});
+			},
 			/**
 			 * 提交登录
 			 */
-			submitForm(formName) {
+			async submitForm(formName) {
 				let that = this;
-				this.$refs[formName].validate(valid => {
-					if (!valid) return;
-				});
-				this.$axios
-					.post("/login", {
-						uname: this.formLabel.name,
-						upwd: this.formLabel.password
-					})
-					.then(({ data }) => {
-						if (!data.status) {
-							alert("login error");
-							return;
-						}
-						that.$router.push({
-							path: "/index"
+				try {
+					await this.validataForm(formName);
+					this.isSubmit = true;
+					this.$axios
+						.post("/login", {
+							uname: this.formLabel.name,
+							upwd: this.formLabel.password
+						})
+						.then(({ data }) => {
+							this.isSubmit = false;
+
+							if (!data.status) {
+								alert("login error");
+								return;
+							}
+							that.$router.push({
+								path: "/index"
+							});
 						});
-					});
+				} catch (err) {}
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
