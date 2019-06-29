@@ -46,17 +46,22 @@ router.beforeEach((to, from, next) => {
   Axios.post("/auth").then(({
     data
   }) => {
-    next();
+
     console.log("auth");
     if (data.auth.status) {
       _store.state.isLogin = true;
       _store.state.userInfo = data.auth.info.user;
+      next();
       return;
     }
 
     _store.state.isLogin = false;
     _store.state.userInfo = {};
-    router.push("/login")
+    if (to.path === '/login') {
+      next()
+      return
+    }
+    next('/login')
   });
 
 });

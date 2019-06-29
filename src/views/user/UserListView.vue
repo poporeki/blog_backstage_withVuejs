@@ -22,11 +22,11 @@
 								<div class="avatar-box">
 									<img
 										v-if="scope.row.avatar_path"
-										:src="'https://v.yansk.cn'+scope.row.avatar_path.save_path+'thumbnail_'+scope.row.avatar_path.new_name"
+										:src="avatarUrl(scope.row.avatar_path.save_path,scope.row.avatar_path.new_name)"
 										onerror="this.src='https://v.yansk.cn/images/my-head.png'"
 										alt="avatar"
-									>
-									<img v-else src="https://v.yansk.cn/images/my-head.png" alt="kong">
+									/>
+									<img v-else src="https://v.yansk.cn/images/my-head.png" alt="kong" />
 								</div>
 							</template>
 						</el-table-column>
@@ -96,10 +96,18 @@
 					limit: 10
 				},
 				total: 0,
-				userList: []
+				userList: [],
+				URL_REG: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/
 			};
 		},
 		methods: {
+			//头像URL
+			avatarUrl(path, new_name) {
+				return this.URL_REG.test(path)
+					? path
+					: `https://v.yansk.cn${path}thumbnail_${new_name}`;
+			},
+			/**获取用户数据 */
 			getUserList() {
 				let that = this;
 				that.loading = true;
